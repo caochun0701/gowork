@@ -6,7 +6,6 @@ import (
 	"sync"
 	"fmt"
 	"libbeat/common"
-	"bytes"
 )
 
 /*
