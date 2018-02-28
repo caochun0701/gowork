@@ -6,7 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/elastic/beats/libbeat/logp"
+	"libbeat/logp"
 	"packetbeat/flows"
 	"packetbeat/protos"
 

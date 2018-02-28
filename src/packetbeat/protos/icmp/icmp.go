@@ -4,10 +4,10 @@ import (
 	"net"
 	"time"
 
-	"github.com/elastic/beats/libbeat/beat"
-	"github.com/elastic/beats/libbeat/common"
-	"github.com/elastic/beats/libbeat/logp"
-	"github.com/elastic/beats/libbeat/monitoring"
+	"libbeat/beat"
+	"libbeat/common"
+	"libbeat/logp"
+	"libbeat/monitoring"
 
 	"packetbeat/flows"
 	"packetbeat/protos"

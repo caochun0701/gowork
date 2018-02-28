@@ -7,9 +7,9 @@ import (
 	"net"
 	"testing"
 
-	"github.com/elastic/beats/libbeat/beat"
-	"github.com/elastic/beats/libbeat/common"
-	"github.com/elastic/beats/libbeat/logp"
+	"libbeat/beat"
+	"libbeat/common"
+	"libbeat/logp"
 
 	"packetbeat/protos"
 

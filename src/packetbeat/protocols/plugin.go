@@ -3,7 +3,7 @@ package protocols
 import (
 	"errors"
 
-	"github.com/elastic/beats/libbeat/plugin"
+	"libbeat/plugin"
 	"packetbeat/protos"
 )
 

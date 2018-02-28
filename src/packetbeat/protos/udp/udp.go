@@ -3,8 +3,8 @@ package udp
 import (
 	"fmt"
 
-	"github.com/elastic/beats/libbeat/common"
-	"github.com/elastic/beats/libbeat/logp"
+	"libbeat/common"
+	"libbeat/logp"
 
 	"packetbeat/flows"
 	"packetbeat/protos"

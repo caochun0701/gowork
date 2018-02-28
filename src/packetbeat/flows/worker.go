@@ -7,8 +7,8 @@ import (
 	"net"
 	"time"
 
-	"github.com/elastic/beats/libbeat/beat"
-	"github.com/elastic/beats/libbeat/common"
+	"libbeat/beat"
+	"libbeat/common"
 )
 
 type flowsProcessor struct {

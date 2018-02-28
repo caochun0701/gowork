@@ -4,10 +4,10 @@ import (
 	"bytes"
 	"time"
 
-	"github.com/elastic/beats/libbeat/beat"
-	"github.com/elastic/beats/libbeat/common"
-	"github.com/elastic/beats/libbeat/logp"
-	"github.com/elastic/beats/libbeat/monitoring"
+	"libbeat/beat"
+	"libbeat/common"
+	"libbeat/logp"
+	"libbeat/monitoring"
 
 	"packetbeat/procs"
 	"packetbeat/protos"
@@ -39,9 +39,8 @@ type redisPlugin struct {
 	ports        []int
 	sendRequest  bool
 	sendResponse bool
-
 	transactionTimeout time.Duration
-
+	//解析后的結果
 	results protos.Reporter
 }
 
@@ -244,7 +243,7 @@ func (redis *redisPlugin) handleRedis(
 }
 /*
 相关联的
- */
+*/
 func (redis *redisPlugin) correlate(conn *redisConnectionData) {
 	// drop responses with missing requests
 	if conn.requests.empty() {
@@ -255,12 +254,10 @@ func (redis *redisPlugin) correlate(conn *redisConnectionData) {
 		}
 		return
 	}
-
-	// merge requests with responses into transactions
+	// 将请求与响应合并到事务中
 	for !conn.responses.empty() && !conn.requests.empty() {
 		requ := conn.requests.pop()
 		resp := conn.responses.pop()
-
 		if redis.results != nil {
 			event := redis.newTransaction(requ, resp)
 			redis.results(event)
@@ -302,10 +299,9 @@ func (redis *redisPlugin) newTransaction(requ, resp *redisMessage) beat.Event {
 	if requ.direction == tcp.TCPDirectionReverse {
 		src, dst = dst, src
 	}
-
 	// resp_time in milliseconds
 	responseTime := int32(resp.ts.Sub(requ.ts).Nanoseconds() / 1e6)
-
+	//格式化解析结果为map
 	fields := common.MapStr{
 		"type":         "redis",
 		"status":       error,

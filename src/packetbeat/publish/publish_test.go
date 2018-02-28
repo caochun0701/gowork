@@ -8,8 +8,8 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/elastic/beats/libbeat/beat"
-	"github.com/elastic/beats/libbeat/common"
+	"libbeat/beat"
+	"libbeat/common"
 )
 
 func testEvent() beat.Event {

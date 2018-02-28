@@ -7,10 +7,10 @@ import (
 	"strings"
 	"time"
 
-	"github.com/elastic/beats/libbeat/beat"
-	"github.com/elastic/beats/libbeat/common"
-	"github.com/elastic/beats/libbeat/common/cfgwarn"
-	"github.com/elastic/beats/libbeat/logp"
+	"libbeat/beat"
+	"libbeat/common"
+	"libbeat/common/cfgwarn"
+	"libbeat/logp"
 )
 
 const (

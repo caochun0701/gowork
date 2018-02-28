@@ -1,0 +1,20 @@
+package autodiscover
+
+import (
+	"libbeat/common"
+)
+
+// Config settings for Autodiscover
+type Config struct {
+	Providers []*common.Config `config:"providers"`
+}
+
+// ProviderConfig settings
+type ProviderConfig struct {
+	Type string `config:"type"`
+}
+
+// BuilderConfig settings
+type BuilderConfig struct {
+	Type string `config:"type"`
+}

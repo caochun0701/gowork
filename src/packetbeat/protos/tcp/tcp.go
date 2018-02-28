@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/elastic/beats/libbeat/common"
-	"github.com/elastic/beats/libbeat/logp"
-	"github.com/elastic/beats/libbeat/monitoring"
+	"libbeat/common"
+	"libbeat/logp"
+	"libbeat/monitoring"
 
 	"packetbeat/flows"
 	"packetbeat/protos"

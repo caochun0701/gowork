@@ -33,7 +33,7 @@ If you have an issue, please start by opening a topic on the
 troubleshoot and work with you on a solution.
 
 If you are sure you found a bug or have a feature request, open an issue on
-[Github](https://github.com/elastic/beats/issues).
+[Github](https://issues).
 
 ## Contributions
 

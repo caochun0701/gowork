@@ -8,7 +8,7 @@ import (
 	// import protocol modules
 	_ "packetbeat/include"
 
-	cmd "github.com/elastic/beats/libbeat/cmd"
+	cmd "libbeat/cmd"
 	"packetbeat/beater"
 )
 

@@ -3,9 +3,9 @@ package redis
 import (
 	"time"
 
-	"github.com/elastic/beats/libbeat/common"
-	"github.com/elastic/beats/libbeat/common/streambuf"
-	"github.com/elastic/beats/libbeat/logp"
+	"libbeat/common"
+	"libbeat/common/streambuf"
+	"libbeat/logp"
 )
 
 type parser struct {

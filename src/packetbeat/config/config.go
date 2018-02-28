@@ -3,8 +3,8 @@ package config
 import (
 	"time"
 
-	"github.com/elastic/beats/libbeat/common"
-	"github.com/elastic/beats/libbeat/processors"
+	"libbeat/common"
+	"libbeat/processors"
 	"packetbeat/procs"
 )
 

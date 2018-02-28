@@ -3,8 +3,8 @@ package flows
 import (
 	"time"
 
-	"github.com/elastic/beats/libbeat/beat"
-	"github.com/elastic/beats/libbeat/logp"
+	"libbeat/beat"
+	"libbeat/logp"
 	"packetbeat/config"
 )
 

@@ -15,8 +15,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/elastic/beats/libbeat/common"
-	"github.com/elastic/beats/libbeat/logp"
+	"libbeat/common"
+	"libbeat/logp"
 )
 
 type socketInfo struct {

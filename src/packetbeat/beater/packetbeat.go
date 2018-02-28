@@ -9,11 +9,11 @@ import (
 
 	"github.com/tsg/gopacket/layers"
 
-	"github.com/elastic/beats/libbeat/beat"
-	"github.com/elastic/beats/libbeat/common"
-	"github.com/elastic/beats/libbeat/logp"
-	"github.com/elastic/beats/libbeat/processors"
-	"github.com/elastic/beats/libbeat/service"
+	"libbeat/beat"
+	"libbeat/common"
+	"libbeat/logp"
+	"libbeat/processors"
+	"libbeat/service"
 
 	"packetbeat/config"
 	"packetbeat/decoder"

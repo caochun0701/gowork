@@ -3,7 +3,7 @@ package decoder
 import (
 	"fmt"
 
-	"github.com/elastic/beats/libbeat/logp"
+	"libbeat/logp"
 	"packetbeat/flows"
 	"packetbeat/protos"
 	"packetbeat/protos/icmp"

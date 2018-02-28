@@ -6,9 +6,9 @@ import (
 	"errors"
 	"time"
 
-	"github.com/elastic/beats/libbeat/beat"
-	"github.com/elastic/beats/libbeat/common"
-	"github.com/elastic/beats/libbeat/common/streambuf"
+	"libbeat/beat"
+	"libbeat/common"
+	"libbeat/common/streambuf"
 )
 
 // A Message its direction indicator

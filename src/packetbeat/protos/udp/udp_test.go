@@ -7,8 +7,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/elastic/beats/libbeat/common"
-	"github.com/elastic/beats/libbeat/logp"
+	"libbeat/common"
+	"libbeat/logp"
 	"packetbeat/protos"
 
 	// import plugins for testing

@@ -3,10 +3,10 @@ package publish
 import (
 	"errors"
 
-	"github.com/elastic/beats/libbeat/beat"
-	"github.com/elastic/beats/libbeat/common"
-	"github.com/elastic/beats/libbeat/logp"
-	"github.com/elastic/beats/libbeat/processors"
+	"libbeat/beat"
+	"libbeat/common"
+	"libbeat/logp"
+	"libbeat/processors"
 )
 
 type TransactionPublisher struct {

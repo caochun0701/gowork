@@ -12,8 +12,8 @@ import (
 	"github.com/tsg/gopacket/layers"
 	"github.com/tsg/gopacket/pcap"
 
-	"github.com/elastic/beats/libbeat/common/atomic"
-	"github.com/elastic/beats/libbeat/logp"
+	"libbeat/common/atomic"
+	"libbeat/logp"
 
 	"packetbeat/config"
 )
