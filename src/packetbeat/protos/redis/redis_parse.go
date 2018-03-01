@@ -27,7 +27,6 @@ type redisMessage struct {
 	message   common.NetString
 	method    common.NetString
 	path      common.NetString
-
 	next *redisMessage
 }
 

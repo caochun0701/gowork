@@ -13,24 +13,25 @@ import (
 	"packetbeat/protos"
 	"packetbeat/protos/applayer"
 	"packetbeat/protos/tcp"
-	"fmt"
-	"encoding/json"
 )
 
 type stream struct {
 	applayer.Stream
+	//解析方法
 	parser   parser
 	tcptuple *common.TCPTuple
 }
 
 type redisConnectionData struct {
+	//stream类型数组，长度为2
 	streams   [2]*stream
 	requests  messageList
 	responses messageList
 }
 
 type messageList struct {
-	head, tail *redisMessage
+	head *redisMessage
+	tail *redisMessage
 }
 
 // Redis 协议 插件
@@ -261,10 +262,10 @@ func (redis *redisPlugin) correlate(conn *redisConnectionData) {
 		if redis.results != nil {
 			event := redis.newTransaction(requ, resp)
 			redis.results(event)
-			b,err := json.Marshal(event)
-			if err == nil {
-				fmt.Printf("this is redis rest protos :%s \n",string(b))
-			}
+			//b,err := json.Marshal(event)
+			//if err == nil {
+			//	fmt.Printf("this is redis rest protos :%s \n",string(b))
+			//}
 		}
 	}
 }

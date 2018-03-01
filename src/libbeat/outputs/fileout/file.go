@@ -110,7 +110,6 @@ func (out *fileOutput) Publish(
 			dropped++
 			continue
 		}
-
 		if _, err = out.rotator.Write(append(serializedEvent, '\n')); err != nil {
 			st.WriteError(err)
 
