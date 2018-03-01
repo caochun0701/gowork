@@ -5,8 +5,8 @@ import (
 	_ "libbeat/outputs/console"
 	_ "libbeat/outputs/elasticsearch"
 	_ "libbeat/outputs/fileout"
-	_ "libbeat/outputs/kafka"
-	_ "libbeat/outputs/logstash"
+	//_ "libbeat/outputs/kafka"
+	//_ "libbeat/outputs/logstash"
 	_ "libbeat/outputs/redis"
 
 	// load support output codec
