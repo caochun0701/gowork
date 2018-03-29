@@ -1,6 +1,11 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"reflect"
+	"unsafe"
+	"github.com/go-lumber/log"
+)
 
 /*切片*/
 func printSlice(x []int){
@@ -12,5 +17,9 @@ func main() {
 	printSlice(numbers)
 	numbers = append(numbers, 100)
 	fmt.Print(numbers)
+
+	s := []string{"w","s","k"}
+	d := (*reflect.SliceHeader)(unsafe.Pointer(&s))
+	log.Println(*d)
 
 }

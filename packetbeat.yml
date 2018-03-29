@@ -1,52 +1,9 @@
-#################### Packetbeat Configuration Example #########################
-
-# This file is an example configuration file highlighting only the most common
-# options. The packetbeat.reference.yml file from the same directory contains all the
-# supported options with more comments. You can use it as a reference.
-#
-# You can find the full configuration reference here:
-# https://www.elastic.co/guide/en/beats/packetbeat/index.html
-
 #============================== Network device ================================
-
 # Select the network interface to sniff the data. On Linux, you can use the
 # "any" keyword to sniff on all connected interfaces.
 packetbeat.interfaces.device: any
 
-#================================== Flows =====================================
-
-# Set `enabled: false` or comment out all options to disable flows reporting.
-packetbeat.flows:
-  # Set network flow timeout. Flow is killed if no packet is received before being
-  # timed out.
-  timeout: 30s
-
-  # Configure reporting period. If set to -1, only killed flows will be reported
-  period: 10s
-
-#========================== Transaction protocols =============================
-
 packetbeat.protocols:
-#- type: icmp
-  # Enable ICMPv4 and ICMPv6 monitoring. Default: false
-# enabled: true
-
-#- type: amqp
-  # Configure the ports where to listen for AMQP traffic. You can disable
-  # the AMQP protocol by commenting out the list of ports.
-#  ports: [5672]
-
-#- type: cassandra
-  #Cassandra port for traffic monitoring.
-#  ports: [9042]
-
-  # include_authorities controls whether or not the dns.authorities field
-  # (authority resource records) is added to messages.
-#  include_authorities: true
-
-  # include_additionals controls whether or not the dns.additionals field
-  # (additional resource records) is added to messages.
-#  include_additionals: true
 
 
 - type: redis
@@ -54,19 +11,7 @@ packetbeat.protocols:
   # the Redis protocol by commenting out the list of ports.
   ports: [6379]
 
-#==================== Elasticsearch template setting ==========================
-
-setup.template.settings:
-  index.number_of_shards: 3
-
-#============================== Kibana =====================================
-
-
-
 #================================ Outputs =====================================
-output:
-  console:
-    pretty: true
 output:
   file:
     path: "/home/caochun"
@@ -82,44 +27,3 @@ output:
   #protocol: "https"
   #username: "elastic"
   #password: "changeme"
-
-#----------------------------- Logstash output --------------------------------
-#output.logstash:
-  # The Logstash hosts
-  #hosts: ["localhost:5044"]
-
-  # Optional SSL. By default is off.
-  # List of root certificates for HTTPS server verifications
-  #ssl.certificate_authorities: ["/etc/pki/root/ca.pem"]
-
-  # Certificate for SSL client authentication
-  #ssl.certificate: "/etc/pki/client/cert.pem"
-
-  # Client Certificate Key
-  #ssl.key: "/etc/pki/client/cert.key"
-
-#================================ Logging =====================================
-
-# Sets log level. The default log level is info.
-# Available log levels are: error, warning, info, debug
-#logging.level: debug
-
-# At debug level, you can selectively enable logging only for some components.
-# To enable all selectors use ["*"]. Examples of other selectors are "beat",
-# "publish", "service".
-#logging.selectors: ["*"]
-
-#============================== Xpack Monitoring ===============================
-# packetbeat can export internal metrics to a central Elasticsearch monitoring
-# cluster.  This requires xpack monitoring to be enabled in Elasticsearch.  The
-# reporting is disabled by default.
-
-# Set to true to enable the monitoring reporter.
-#xpack.monitoring.enabled: false
-
-# Uncomment to send the metrics to Elasticsearch. Most settings from the
-# Elasticsearch output are accepted here as well. Any setting that is not set is
-# automatically inherited from the Elasticsearch output configuration, so if you
-# have the Elasticsearch output configured, you can simply uncomment the
-# following line.
-#xpack.monitoring.elasticsearch:

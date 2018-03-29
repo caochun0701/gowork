@@ -50,11 +50,11 @@ func Load(
 		Processors:    processors,
 		Annotations: Annotations{
 			Event: config.EventMetadata,
-			Beat: common.MapStr{
-				"name":     name,
-				"hostname": beatInfo.Hostname,
-				"version":  beatInfo.Version,
-			},
+			//Beat: common.MapStr{
+			//	"name":     name,
+			//	"hostname": beatInfo.Hostname,
+			//	"version":  beatInfo.Version,
+			//},
 		},
 	}
 
@@ -103,7 +103,7 @@ func loadOutput(
 		outStats = outputs.NewStats(outReg)
 	}
 
-	out, err := outputs.Load(beatInfo, outStats, outcfg.Name(), outcfg.Config())
+	out, err := outputs.Load(outStats, outcfg.Name(), outcfg.Config())
 	if err != nil {
 		return outputs.Fail(err)
 	}

@@ -4,7 +4,6 @@ import (
 	"os"
 	"path/filepath"
 
-	"libbeat/beat"
 	"libbeat/common"
 	"libbeat/common/file"
 	"libbeat/logp"
@@ -12,13 +11,12 @@ import (
 	"libbeat/outputs/codec"
 	"libbeat/publisher"
 )
-
 func init() {
 	outputs.RegisterType("file", makeFileout)
 }
 
 type fileOutput struct {
-	beat     beat.Info
+	//beat     beat.Info
 	observer outputs.Observer
 	rotator  *file.Rotator
 	codec    codec.Codec
@@ -26,7 +24,7 @@ type fileOutput struct {
 
 // makeFileout instantiates a new file output instance.
 func makeFileout(
-	beat beat.Info,
+	//beat beat.Info,
 	observer outputs.Observer,
 	cfg *common.Config,
 ) (outputs.Group, error) {
@@ -37,26 +35,22 @@ func makeFileout(
 
 	// disable bulk support in publisher pipeline
 	cfg.SetInt("bulk_max_size", -1, -1)
-
 	fo := &fileOutput{
-		beat:     beat,
+		//beat:     beat,
 		observer: observer,
 	}
-	if err := fo.init(beat, config); err != nil {
+	if err := fo.init(config); err != nil {
 		return outputs.Fail(err)
 	}
-
 	return outputs.Success(-1, 0, fo)
 }
 
 
-func (out *fileOutput) init(beat beat.Info, c config) error {
+func (out *fileOutput) init(c config) error {
 	//读取配置文件中的文件输出的路径和文件名
 	var path string
 	if c.Filename != "" {
 		path = filepath.Join(c.Path, c.Filename)
-	} else {
-		path = filepath.Join(c.Path, out.beat.Beat)
 	}
 	var err error
 	out.rotator, err = file.NewFileRotator(
@@ -69,7 +63,7 @@ func (out *fileOutput) init(beat beat.Info, c config) error {
 		return err
 	}
 
-	out.codec, err = codec.CreateEncoder(beat, c.Codec)
+	out.codec, err = codec.CreateEncoder(c.Codec)
 	if err != nil {
 		return err
 	}
@@ -94,12 +88,11 @@ func (out *fileOutput) Publish(
 	st := out.observer
 	events := batch.Events()
 	st.NewBatch(len(events))
-
 	dropped := 0
 	for i := range events {
 		event := &events[i]
-
-		serializedEvent, err := out.codec.Encode(out.beat.Beat, &event.Content)
+		//serializedEvent, err := out.codec.Encode(out.beat.Beat, &event.Content)
+		serializedEvent, err := out.codec.EncodeFile(&event.Content)
 		if err != nil {
 			if event.Guaranteed() {
 				logp.Critical("Failed to serialize the event: %v", err)

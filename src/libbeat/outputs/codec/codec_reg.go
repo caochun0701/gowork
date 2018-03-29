@@ -3,11 +3,10 @@ package codec
 import (
 	"fmt"
 
-	"libbeat/beat"
 	"libbeat/common"
 )
 
-type Factory func(beat.Info, *common.Config) (Codec, error)
+type Factory func(*common.Config) (Codec, error)
 
 type Config struct {
 	Namespace common.ConfigNamespace `config:",inline"`
@@ -22,7 +21,7 @@ func RegisterType(name string, gen Factory) {
 	codecs[name] = gen
 }
 
-func CreateEncoder(info beat.Info, cfg Config) (Codec, error) {
+func CreateEncoder(cfg Config) (Codec, error) {
 	// default to json codec
 	codec := "json"
 	if name := cfg.Namespace.Name(); name != "" {
@@ -33,5 +32,5 @@ func CreateEncoder(info beat.Info, cfg Config) (Codec, error) {
 	if factory == nil {
 		return nil, fmt.Errorf("'%v' output codec is not available", codec)
 	}
-	return factory(info, cfg.Namespace.Config())
+	return factory(cfg.Namespace.Config())
 }

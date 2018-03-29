@@ -47,13 +47,13 @@ type TCPPlugin interface {
 	ConnectionTimeout() time.Duration
 }
 //udp协议接口
-type UDPPlugin interface {
-	Plugin
-
-	// ParseUDP is invoked when UDP payload data is available for parsing.
-	//udp协议是无状态协议，所以只做协议解析
-	ParseUDP(pkt *Packet)
-}
+//type UDPPlugin interface {
+//	Plugin
+//
+//	// ParseUDP is invoked when UDP payload data is available for parsing.
+//	//udp协议是无状态协议，所以只做协议解析
+//	ParseUDP(pkt *Packet)
+//}
 
 // Protocol identifier.
 type Protocol uint16

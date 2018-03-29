@@ -167,7 +167,6 @@ func NewBeat(name, indexPrefix, v string) (*Beat, error) {
 			UUID:        uuid.NewV4(),
 		},
 	}
-
 	return &Beat{Beat: b}, nil
 }
 

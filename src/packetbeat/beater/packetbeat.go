@@ -12,17 +12,17 @@ import (
 	"libbeat/beat"
 	"libbeat/common"
 	"libbeat/logp"
-	"libbeat/processors"
+	//"libbeat/processors"
 	"libbeat/service"
 
 	"packetbeat/config"
 	"packetbeat/decoder"
-	"packetbeat/flows"
+	//"packetbeat/flows"
 	"packetbeat/procs"
 	"packetbeat/protos"
 	"packetbeat/protos/icmp"
 	"packetbeat/protos/tcp"
-	"packetbeat/protos/udp"
+	//"packetbeat/protos/udp"
 	"packetbeat/publish"
 	"packetbeat/sniffer"
 
@@ -39,7 +39,7 @@ type packetbeat struct {
 	// publisher/pipeline
 	pipeline beat.Pipeline
 	transPub *publish.TransactionPublisher
-	flows    *flows.Flows
+	//flows    *flows.Flows
 }
 
 type flags struct {
@@ -115,9 +115,9 @@ func (pb *packetbeat) init(b *beat.Beat) error {
 		return fmt.Errorf("Initializing protocol analyzers failed: %v", err)
 	}
 
-	if err := pb.setupFlows(); err != nil {
-		return err
-	}
+	//if err := pb.setupFlows(); err != nil {
+	//	return err
+	//}
 
 	return pb.setupSniffer()
 }
@@ -142,32 +142,32 @@ func (pb *packetbeat) setupSniffer() error {
 	return err
 }
 
-func (pb *packetbeat) setupFlows() error {
-	config := &pb.config
-	if !config.Flows.IsEnabled() {
-		return nil
-	}
-
-	processors, err := processors.New(config.Flows.Processors)
-	if err != nil {
-		return err
-	}
-
-	client, err := pb.pipeline.ConnectWith(beat.ClientConfig{
-		EventMetadata: config.Flows.EventMetadata,
-		Processor:     processors,
-	})
-	if err != nil {
-		return err
-	}
-
-	pb.flows, err = flows.NewFlows(client.PublishAll, config.Flows)
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
+//func (pb *packetbeat) setupFlows() error {
+//	config := &pb.config
+//	if !config.Flows.IsEnabled() {
+//		return nil
+//	}
+//
+//	processors, err := processors.New(config.Flows.Processors)
+//	if err != nil {
+//		return err
+//	}
+//
+//	client, err := pb.pipeline.ConnectWith(beat.ClientConfig{
+//		EventMetadata: config.Flows.EventMetadata,
+//		Processor:     processors,
+//	})
+//	if err != nil {
+//		return err
+//	}
+//
+//	pb.flows, err = flows.NewFlows(client.PublishAll, config.Flows)
+//	if err != nil {
+//		return err
+//	}
+//
+//	return nil
+//}
 
 func (pb *packetbeat) Run(b *beat.Beat) error {
 	defer func() {
@@ -184,11 +184,11 @@ func (pb *packetbeat) Run(b *beat.Beat) error {
 	if timeout > 0 {
 		defer time.Sleep(timeout)
 	}
-
-	if pb.flows != nil {
-		pb.flows.Start()
-		defer pb.flows.Stop()
-	}
+	//
+	//if pb.flows != nil {
+	//	pb.flows.Start()
+	//	defer pb.flows.Stop()
+	//}
 
 	var wg sync.WaitGroup
 	errC := make(chan error, 1)
@@ -249,13 +249,14 @@ func (pb *packetbeat) createWorker(dl layers.LinkType) (sniffer.Worker, error) {
 	if err != nil {
 		return nil, err
 	}
+	//
+	//udp, err := udp.NewUDP(&protos.Protos)
+	//if err != nil {
+	//	return nil, err
+	//}
 
-	udp, err := udp.NewUDP(&protos.Protos)
-	if err != nil {
-		return nil, err
-	}
-
-	worker, err := decoder.New(pb.flows, dl, icmp4, icmp6, tcp, udp)
+	//worker, err := decoder.New(pb.flows, dl, icmp4, icmp6, tcp, udp)
+	worker, err := decoder.New(dl, icmp4, icmp6, tcp)
 	if err != nil {
 		return nil, err
 	}

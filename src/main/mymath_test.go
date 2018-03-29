@@ -1,4 +1,4 @@
-package mymath_test
+package main
 
 import (
 	"testing"

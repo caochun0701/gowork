@@ -2,8 +2,6 @@ package outputs
 
 import (
 	"fmt"
-
-	"libbeat/beat"
 	"libbeat/common"
 	"libbeat/common/cfgwarn"
 )
@@ -12,7 +10,7 @@ var outputReg = map[string]Factory{}
 
 // Factory is used by output plugins to build an output instance
 type Factory func(
-	beat beat.Info,
+	//beat beat.Info,
 	stats Observer,
 	cfg *common.Config) (Group, error)
 
@@ -38,7 +36,7 @@ func FindFactory(name string) Factory {
 }
 
 // Load creates and configures a output Group using a configuration object..
-func Load(info beat.Info, stats Observer, name string, config *common.Config) (Group, error) {
+func Load(stats Observer, name string, config *common.Config) (Group, error) {
 	factory := FindFactory(name)
 	if factory == nil {
 		return Group{}, fmt.Errorf("output type %v undefined", name)
@@ -51,5 +49,5 @@ func Load(info beat.Info, stats Observer, name string, config *common.Config) (G
 	if stats == nil {
 		stats = NewNilObserver()
 	}
-	return factory(info, stats, config)
+	return factory(stats, config)
 }

@@ -64,10 +64,10 @@ func validatePorts(ports []int) error {
 type Protocols interface {
 	BpfFilter(withVlans bool, withICMP bool) string
 	GetTCP(proto Protocol) TCPPlugin
-	GetUDP(proto Protocol) UDPPlugin
+	//GetUDP(proto Protocol) UDPPlugin
 
 	GetAllTCP() map[Protocol]TCPPlugin
-	GetAllUDP() map[Protocol]UDPPlugin
+	//GetAllUDP() map[Protocol]UDPPlugin
 
 	// Register(proto Protocol, plugin ProtocolPlugin)
 }
@@ -76,14 +76,14 @@ type Protocols interface {
 type ProtocolsStruct struct {
 	all map[Protocol]protocolInstance
 	tcp map[Protocol]TCPPlugin
-	udp map[Protocol]UDPPlugin
+	//udp map[Protocol]UDPPlugin
 }
 
 // Singleton of Protocols type.
 var Protos = ProtocolsStruct{
 	all: map[Protocol]protocolInstance{},
 	tcp: map[Protocol]TCPPlugin{},
-	udp: map[Protocol]UDPPlugin{},
+	//udp: map[Protocol]UDPPlugin{},
 }
 
 type protocolInstance struct {
@@ -187,22 +187,22 @@ func (s ProtocolsStruct) GetTCP(proto Protocol) TCPPlugin {
 	return plugin
 }
 
-func (s ProtocolsStruct) GetUDP(proto Protocol) UDPPlugin {
-	plugin, exists := s.udp[proto]
-	if !exists {
-		return nil
-	}
-
-	return plugin
-}
+//func (s ProtocolsStruct) GetUDP(proto Protocol) UDPPlugin {
+//	plugin, exists := s.udp[proto]
+//	if !exists {
+//		return nil
+//	}
+//
+//	return plugin
+//}
 
 func (s ProtocolsStruct) GetAllTCP() map[Protocol]TCPPlugin {
 	return s.tcp
 }
 
-func (s ProtocolsStruct) GetAllUDP() map[Protocol]UDPPlugin {
-	return s.udp
-}
+//func (s ProtocolsStruct) GetAllUDP() map[Protocol]UDPPlugin {
+//	return s.udp
+//}
 
 // BpfFilter returns a Berkeley Packer Filter (BFP) expression that
 // will match against packets for the registered protocols. If with_vlans is
@@ -227,9 +227,9 @@ func (s ProtocolsStruct) BpfFilter(withVlans bool, withICMP bool) string {
 			if _, present := s.tcp[proto]; present {
 				hasTCP = true
 			}
-			if _, present := s.udp[proto]; present {
-				hasUDP = true
-			}
+			//if _, present := s.udp[proto]; present {
+			//	hasUDP = true
+			//}
 
 			var expr string
 			if hasTCP && !hasUDP {
@@ -270,10 +270,10 @@ func (s ProtocolsStruct) register(proto Protocol, client beat.Client, plugin Plu
 		s.tcp[proto] = tcp
 		success = true
 	}
-	if udp, ok := plugin.(UDPPlugin); ok {
-		s.udp[proto] = udp
-		success = true
-	}
+	//if udp, ok := plugin.(UDPPlugin); ok {
+	//	s.udp[proto] = udp
+	//	success = true
+	//}
 	if !success {
 		logp.Warn("Protocol (%s) register failed, port: %v", proto.String(), plugin.GetPorts())
 	}

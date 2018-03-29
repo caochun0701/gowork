@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"sync"
 
-	"libbeat/beat"
 	"libbeat/common"
 	"libbeat/logp"
 	"libbeat/outputs"
@@ -48,7 +47,7 @@ func RegisterConnectCallback(callback connectCallback) {
 }
 
 func makeES(
-	beat beat.Info,
+	//beat beat.Info,
 	observer outputs.Observer,
 	cfg *common.Config,
 ) (outputs.Group, error) {
@@ -57,7 +56,7 @@ func makeES(
 	}
 
 	if !cfg.HasField("index") {
-		pattern := fmt.Sprintf("%v-%v-%%{+yyyy.MM.dd}", beat.IndexPrefix, beat.Version)
+		pattern := fmt.Sprintf("%v-%v-%%{+yyyy.MM.dd}")
 		cfg.SetString("index", -1, pattern)
 	}
 

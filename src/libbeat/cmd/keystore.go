@@ -22,7 +22,6 @@ import (
 
 func getKeystore(name, version string) (keystore.Keystore, error) {
 	b, err := instance.NewBeat(name, "", version)
-
 	if err != nil {
 		return nil, fmt.Errorf("error initializing beat: %s", err)
 	}

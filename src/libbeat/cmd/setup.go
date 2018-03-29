@@ -26,7 +26,6 @@ func genSetupCmd(name, idxPrefix, version string, beatCreator beat.Creator) *cob
 				fmt.Fprintf(os.Stderr, "Error initializing beat: %s\n", err)
 				os.Exit(1)
 			}
-
 			template, _ := cmd.Flags().GetBool("template")
 			dashboards, _ := cmd.Flags().GetBool("dashboards")
 			machineLearning, _ := cmd.Flags().GetBool("machine-learning")

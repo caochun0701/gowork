@@ -29,7 +29,7 @@ var defaultConfig = config{
 }
 
 func init() {
-	codec.RegisterType("json", func(info beat.Info, cfg *common.Config) (codec.Codec, error) {
+	codec.RegisterType("json", func(cfg *common.Config) (codec.Codec, error) {
 		config := defaultConfig
 		if cfg != nil {
 			if err := cfg.Unpack(&config); err != nil {
@@ -37,13 +37,13 @@ func init() {
 			}
 		}
 
-		return New(config.Pretty, info.Version), nil
+		return New(config.Pretty), nil
 	})
 }
 
 // New creates a new json Encoder.
-func New(pretty bool, version string) *Encoder {
-	e := &Encoder{pretty: pretty, version: version}
+func New(pretty bool) *Encoder {
+	e := &Encoder{pretty: pretty}
 	e.reset()
 	return e
 }
@@ -75,6 +75,26 @@ func (e *Encoder) Encode(index string, event *beat.Event) ([]byte, error) {
 		return nil, err
 	}
 
+	json := e.buf.Bytes()
+	if !e.pretty {
+		return json, nil
+	}
+
+	var buf bytes.Buffer
+	if err = stdjson.Indent(&buf, json, "", "  "); err != nil {
+		return nil, err
+	}
+
+	return buf.Bytes(), nil
+}
+
+func (e *Encoder) EncodeFile(event *beat.Event) ([]byte, error) {
+	e.buf.Reset()
+	err := e.folder.Fold(makeEventFile(event))
+	if err != nil {
+		e.reset()
+		return nil, err
+	}
 	json := e.buf.Bytes()
 	if !e.pretty {
 		return json, nil

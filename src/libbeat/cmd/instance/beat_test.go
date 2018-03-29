@@ -14,7 +14,6 @@ func TestNewInstance(t *testing.T) {
 	if err != nil {
 		panic(err)
 	}
-
 	assert.Equal(t, "testbeat", b.Info.Beat)
 	assert.Equal(t, "testidx", b.Info.IndexPrefix)
 	assert.Equal(t, "0.9", b.Info.Version)

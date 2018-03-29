@@ -15,6 +15,11 @@ type event struct {
 	Fields    common.MapStr `struct:",inline"`
 }
 
+type eventfile struct {
+	Timestamp time.Time     `struct:"@timestamp"`
+	Fields    common.MapStr `struct:",inline"`
+}
+
 // Meta defines common event metadata to be stored in '@metadata'
 type meta struct {
 	Beat    string                 `struct:"beat"`
@@ -32,6 +37,13 @@ func makeEvent(index, version string, in *beat.Event) event {
 			Type:    "doc",
 			Fields:  in.Meta,
 		},
+		Fields: in.Fields,
+	}
+}
+
+func makeEventFile(in *beat.Event) eventfile {
+	return eventfile{
+		Timestamp: in.Timestamp,
 		Fields: in.Fields,
 	}
 }

@@ -18,7 +18,7 @@ type Config struct {
 }
 
 func init() {
-	codec.RegisterType("format", func(_ beat.Info, cfg *common.Config) (codec.Codec, error) {
+	codec.RegisterType("format", func(cfg *common.Config) (codec.Codec, error) {
 		config := Config{}
 		if cfg == nil {
 			return nil, errors.New("empty format codec configuration")
@@ -37,5 +37,9 @@ func New(fmt *fmtstr.EventFormatString) *Encoder {
 }
 
 func (e *Encoder) Encode(_ string, event *beat.Event) ([]byte, error) {
+	return e.Format.RunBytes(event)
+}
+
+func (e *Encoder) EncodeFile(event *beat.Event) ([]byte, error) {
 	return e.Format.RunBytes(event)
 }
