@@ -82,16 +82,16 @@ func (p *TransactionPublisher) CreateReporter(
 	if err != nil {
 		return nil, err
 	}
-
-	// start worker, so post-processing and processor-pipeline
-	// can work concurrently to sniffer acquiring new events
+	// 启动 worker, so post-processing and processor-pipeline
+	// 可以同时监听嗅探器获取新beat.Event
 	ch := make(chan beat.Event, 3)
 	go p.worker(ch, client)
 	return func(event beat.Event) {
 		select {
 		case ch <- event:
 		case <-p.done:
-			ch = nil // stop serving more send requests
+			// stop serving more send requests
+			ch = nil
 		}
 	}, nil
 }
@@ -123,8 +123,10 @@ func (p *transProcessor) Run(event *beat.Event) (*beat.Event, error) {
 	return event, nil
 }
 
-// filterEvent validates an event for common required fields with types.
-// If event is to be filtered out the reason is returned as error.
+/*
+filter 验证，是否有@timestamp、type
+如果验证不通过则返回 error.
+*/
 func validateEvent(event *beat.Event) error {
 	fields := event.Fields
 
@@ -149,33 +151,16 @@ func validateEvent(event *beat.Event) error {
 
 	return nil
 }
-
+/*
+  重新设置、 删除源地址信息、删除目标地址信息
+*/
 func (p *transProcessor) normalizeTransAddr(event common.MapStr) bool {
 	debugf("normalize address for: %v", event)
-
-	var srcServer, dstServer string
 	src, ok := event["src"].(*common.Endpoint)
 	debugf("has src: %v", ok)
 	if ok {
-		// check if it's outgoing transaction (as client)
-		isOutgoing := p.IsPublisherIP(src.IP)
-		if isOutgoing {
-			if p.ignoreOutgoing {
-				// duplicated transaction -> ignore it
-				debugf("Ignore duplicated transaction on: %s -> %s", srcServer, dstServer)
-				return false
-			}
-
-			//outgoing transaction
-			event["direction"] = "out"
-		}
-
 		event["client_ip"] = src.IP
 		event["client_port"] = src.Port
-		event["client_proc"] = src.Proc
-		if _, exists := event["client_server"]; !exists {
-			event["client_server"] = p.GetServerName(src.IP)
-		}
 		delete(event, "src")
 	}
 
@@ -184,43 +169,7 @@ func (p *transProcessor) normalizeTransAddr(event common.MapStr) bool {
 	if ok {
 		event["ip"] = dst.IP
 		event["port"] = dst.Port
-		event["proc"] = dst.Proc
-		if _, exists := event["server"]; !exists {
-			event["server"] = p.GetServerName(dst.IP)
-		}
 		delete(event, "dst")
-
-		//check if it's incoming transaction (as server)
-		if p.IsPublisherIP(dst.IP) {
-			// incoming transaction
-			event["direction"] = "in"
-		}
-
 	}
-
 	return true
-}
-
-func (p *transProcessor) IsPublisherIP(ip string) bool {
-	for _, myip := range p.localIPs {
-		if myip == ip {
-			return true
-		}
-	}
-	return false
-}
-
-func (p *transProcessor) GetServerName(ip string) string {
-	// in case the IP is localhost, return current shipper name
-	islocal, err := common.IsLoopback(ip)
-	if err != nil {
-		logp.Err("Parsing IP %s fails with: %s", ip, err)
-		return ""
-	}
-
-	if islocal {
-		return p.name
-	}
-
-	return ""
 }

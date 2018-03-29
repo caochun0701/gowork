@@ -285,16 +285,21 @@ func (redis *redisPlugin) newTransaction(requ, resp *redisMessage) beat.Event {
 	//		"return_value": resp.message,
 	//	}
 	//}
-
+	/*
+	源地址信息
+	*/
 	src := &common.Endpoint{
 		IP:   requ.tcpTuple.SrcIP.String(),
 		Port: requ.tcpTuple.SrcPort,
-		Proc: string(requ.cmdlineTuple.Src),
+		//Proc: string(requ.cmdlineTuple.Src),
 	}
+	/*
+	目标地址信息
+	*/
 	dst := &common.Endpoint{
 		IP:   requ.tcpTuple.DstIP.String(),
 		Port: requ.tcpTuple.DstPort,
-		Proc: string(requ.cmdlineTuple.Dst),
+		//Proc: string(requ.cmdlineTuple.Dst),
 	}
 	if requ.direction == tcp.TCPDirectionReverse {
 		src, dst = dst, src
