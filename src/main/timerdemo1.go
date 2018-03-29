@@ -2,7 +2,7 @@ package main
 
 import (
 	"time"
-	"github.com/go-lumber/log"
+	"log"
 )
 
 func main() {
