@@ -236,7 +236,8 @@ func (redis *redisPlugin) handleRedis(
 	m.direction = dir
 	m.cmdlineTuple = procs.ProcWatcher.FindProcessesTuple(tcptuple.IPPort())
 	if m.isRequest {
-		conn.requests.append(m) // wait for response
+		// wait for response
+		conn.requests.append(m)
 	} else {
 		conn.responses.append(m)
 		redis.correlate(conn)
@@ -255,17 +256,13 @@ func (redis *redisPlugin) correlate(conn *redisConnectionData) {
 		}
 		return
 	}
-	// 将请求与响应合并到事务中
+	//将请求与响应合并到事务中
 	for !conn.responses.empty() && !conn.requests.empty() {
 		requ := conn.requests.pop()
 		resp := conn.responses.pop()
 		if redis.results != nil {
 			event := redis.newTransaction(requ, resp)
 			redis.results(event)
-			//b,err := json.Marshal(event)
-			//if err == nil {
-			//	fmt.Printf("this is redis rest protos :%s \n",string(b))
-			//}
 		}
 	}
 }
@@ -275,17 +272,19 @@ func (redis *redisPlugin) newTransaction(requ, resp *redisMessage) beat.Event {
 	if resp.isError {
 		error = common.ERROR_STATUS
 	}
-
-	var returnValue map[string]common.NetString
-	if resp.isError {
-		returnValue = map[string]common.NetString{
-			"error": resp.message,
-		}
-	} else {
-		returnValue = map[string]common.NetString{
-			"return_value": resp.message,
-		}
-	}
+	/*
+	 取消返回数据，以减少数据大小
+	*/
+	//var returnValue map[string]common.NetString
+	//if resp.isError {
+	//	returnValue = map[string]common.NetString{
+	//		"error": resp.message,
+	//	}
+	//} else {
+	//	returnValue = map[string]common.NetString{
+	//		"return_value": resp.message,
+	//	}
+	//}
 
 	src := &common.Endpoint{
 		IP:   requ.tcpTuple.SrcIP.String(),
@@ -307,7 +306,7 @@ func (redis *redisPlugin) newTransaction(requ, resp *redisMessage) beat.Event {
 		"type":         "redis",
 		"status":       error,
 		"responsetime": responseTime,
-		"redis":        returnValue,
+		//"redis":        returnValue,
 		"method":       common.NetString(bytes.ToUpper(requ.method)),
 		"resource":     requ.path,
 		"query":        requ.message,

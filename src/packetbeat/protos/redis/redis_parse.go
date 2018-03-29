@@ -128,7 +128,7 @@ var redisCommands = map[string]struct{}{
 	"PFADD":            {},
 	"PFCOUNT":          {},
 	"PFMERGE":          {},
-	"PING":             {},
+	//"PING":             {},//注销ping监控
 	"PSETEX":           {},
 	"PSUBSCRIBE":       {},
 	"PTTL":             {},
