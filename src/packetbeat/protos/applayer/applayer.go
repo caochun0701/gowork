@@ -178,12 +178,12 @@ func (t *Transaction) Init(
 	t.Src = common.Endpoint{
 		IP:   tuple.SrcIP.String(),
 		Port: tuple.SrcPort,
-		Proc: string(cmdline.Src),
+		//Proc: string(cmdline.Src),
 	}
 	t.Dst = common.Endpoint{
 		IP:   tuple.DstIP.String(),
 		Port: tuple.DstPort,
-		Proc: string(cmdline.Dst),
+		//Proc: string(cmdline.Dst),
 	}
 	t.Notes = notes
 
