@@ -6,5 +6,8 @@ type Endpoint struct {
 	Port    uint16
 	Name    string
 	Cmdline string
+	Method  string
+	Resource string
+	Count int
 	//Proc    string
 }
