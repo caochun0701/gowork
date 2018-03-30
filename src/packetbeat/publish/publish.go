@@ -7,6 +7,7 @@ import (
 	"libbeat/common"
 	"libbeat/logp"
 	"libbeat/processors"
+	"packetbeat/protos/redis"
 )
 
 type TransactionPublisher struct {
@@ -171,5 +172,6 @@ func (p *transProcessor) normalizeTransAddr(event common.MapStr) bool {
 		event["port"] = dst.Port
 		delete(event, "dst")
 	}
+	redis.SuspectedHotkeyStore(event)
 	return true
 }
