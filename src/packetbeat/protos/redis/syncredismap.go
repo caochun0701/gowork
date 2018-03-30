@@ -13,16 +13,6 @@ import (
 2、找出大values
 */
 
-/*
-定义一个结构体
- */
-type hotKey struct {
-	event beat.Event
-}
-type CountNum struct {
-	Count int
-}
-
 var m sync.Map
 
 /*
