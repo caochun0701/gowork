@@ -6,6 +6,7 @@ import (
 	"libbeat/common"
 	"fmt"
 	"bytes"
+	"encoding/json"
 )
 
 /*
@@ -29,38 +30,33 @@ var m sync.Map
  存储所有接收到Fields
 */
 func SuspectedHotkeyStore(event common.MapStr){
-
-	port, ok := event["port"].(*common.Endpoint)
-	if ok {
-		fmt.Println(port)
-	}
-
-	method, ok := event["method"].(*common.Endpoint)
-	if ok {
-		fmt.Println(method)
-	}
-
-	resource, ok := event["resource"].(*common.Endpoint)
-	if ok {
-		fmt.Println(resource)
-	}
+	port := event["port"].(uint16)
+	method := event["method"].(common.NetString)
+	resource := event["resource"].(common.NetString)
 	//进行key拼接
 	var buf bytes.Buffer
-	buf.WriteString(string(port.Port) + ":")
-	buf.WriteString(method.Method + ":")
-	buf.WriteString(method.Resource)
+	buf.WriteString(string(port)+ ":")
+	buf.WriteString(string(method) + ":")
+	buf.WriteString(string(resource))
 
 	fields, ok := m.Load(buf.String())
 	if ok{
 		//当前 Fields count +1
-		for key, value := range fields.(interface{}).(map[string]*common.Endpoint) {
-			event["count"] = value.Count + 1
-			m.Store(key,event)
+		fs, ok := fields.(common.MapStr)
+		if !ok {
+			fmt.Println("!ok")
 		}
+		count := fs["count"]
+		c, ok := count.(int)
+		if !ok {
+			fmt.Println("!ok")
+		}
+		fs["count"] = c + 1
+		m.Store(buf.String(),fields)
 	}else{
 		//当前Fields count = 1
 		event["count"] = 1
-		m.Store(buf,event)
+		m.Store(buf.String(),event)
 	}
 	debugf("%s , %v", fields, ok)
 }
