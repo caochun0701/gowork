@@ -1,7 +1,6 @@
 package redis
 
 import (
-	"libbeat/beat"
 	"sync"
 	"libbeat/common"
 	"fmt"
