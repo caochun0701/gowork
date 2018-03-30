@@ -6,7 +6,6 @@ import (
 	"libbeat/common"
 	"fmt"
 	"bytes"
-	"encoding/json"
 )
 
 /*
