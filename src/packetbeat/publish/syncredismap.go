@@ -1,7 +1,8 @@
-package redis
+package publish
 
 import (
 	"sync"
+	"libbeat/beat"
 	"libbeat/common"
 	"fmt"
 	"bytes"
@@ -17,7 +18,7 @@ var m sync.Map
 /*
  存储所有接收到Fields
 */
-func SuspectedHotkeyStore(event common.MapStr){
+func suspectedHotkeyStore(event common.MapStr){
 	port := event["port"].(uint16)
 	method := event["method"].(common.NetString)
 	resource := event["resource"].(common.NetString)
@@ -49,9 +50,16 @@ func SuspectedHotkeyStore(event common.MapStr){
 	debugf("%s , %v", fields, ok)
 }
 /*
- 存储符合条件的大value Fields
+ 清空 map操作
 */
-func bigValuesStore(event common.MapStr){
+func clearHotKeyBigValuesMap(){
 
+}
+/*
+ 找出热key和大values
+*/
+func findHotKeysBigValues(client beat.Client)  {
+	//返回给event进行输出
+	//client.Publish(*pub)
 }
 

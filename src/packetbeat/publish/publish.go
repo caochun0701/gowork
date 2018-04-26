@@ -7,7 +7,6 @@ import (
 	"libbeat/common"
 	"libbeat/logp"
 	"libbeat/processors"
-	"packetbeat/protos/redis"
 )
 
 type TransactionPublisher struct {
@@ -106,21 +105,23 @@ func (p *TransactionPublisher) worker(ch chan beat.Event, client beat.Client) {
 			pub, _ := p.processor.Run(&event)
 			if pub != nil {
 				client.Publish(*pub)
+				//对列信息进行count和大values查询
+				suspectedHotkeyStore(pub.Fields)
 			}
 		}
 	}
 }
 
 func (p *transProcessor) Run(event *beat.Event) (*beat.Event, error) {
+	//filter 验证
 	if err := validateEvent(event); err != nil {
 		logp.Warn("Dropping invalid event: %v", err)
 		return nil, nil
 	}
-
+	//重新设置地址信息
 	if !p.normalizeTransAddr(event.Fields) {
 		return nil, nil
 	}
-
 	return event, nil
 }
 
@@ -172,6 +173,5 @@ func (p *transProcessor) normalizeTransAddr(event common.MapStr) bool {
 		event["port"] = dst.Port
 		delete(event, "dst")
 	}
-	redis.SuspectedHotkeyStore(event)
 	return true
 }
