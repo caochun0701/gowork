@@ -6,6 +6,7 @@ import (
 	"libbeat/common"
 	"fmt"
 	"bytes"
+	"time"
 )
 
 /*
@@ -13,12 +14,11 @@ import (
 2、找出大values
 */
 
-var m sync.Map
 
 /*
  存储所有接收到Fields
 */
-func suspectedHotkeyStore(event common.MapStr){
+func suspectedHotkeyStore(m *sync.Map, event common.MapStr){
 	port := event["port"].(uint16)
 	method := event["method"].(common.NetString)
 	resource := event["resource"].(common.NetString)
@@ -49,17 +49,22 @@ func suspectedHotkeyStore(event common.MapStr){
 	}
 	debugf("%s , %v", fields, ok)
 }
-/*
- 清空 map操作
-*/
-func clearHotKeyBigValuesMap(){
 
-}
-/*
- 找出热key和大values
-*/
-func findHotKeysBigValues(client beat.Client)  {
-	//返回给event进行输出
-	//client.Publish(*pub)
+func findHotKeysBigValues(m *sync.Map,client beat.Client)  {
+	m.Range(func(k, v interface{}) bool {
+		fmt.Println(k, v)
+		//找出热key
+		//if(){
+			//返回给event进行输出
+			//client.Publish(*pub)
+		//}
+		//大values
+		//if(){
+			//返回给event进行输出
+			//client.Publish(*pub)
+		//}
+
+		return true
+	})
 }
 

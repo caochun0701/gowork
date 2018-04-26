@@ -7,6 +7,9 @@ import (
 	"libbeat/common"
 	"libbeat/logp"
 	"libbeat/processors"
+	"time"
+	"sync"
+	"fmt"
 )
 
 type TransactionPublisher struct {
@@ -97,16 +100,26 @@ func (p *TransactionPublisher) CreateReporter(
 }
 
 func (p *TransactionPublisher) worker(ch chan beat.Event, client beat.Client) {
+	//定时器 5 秒执行一次
+	t := time.NewTimer(5*time.Second)
+	//创建一个map
+	m := new(sync.Map)
 	for {
 		select {
 		case <-p.done:
 			return
+		case <-t.C:
+			// range
+			findHotKeysBigValues(m,client)
+			m = new(sync.Map)
+			//重新设置5秒过期
+			t.Reset(5*time.Second)
 		case event := <-ch:
 			pub, _ := p.processor.Run(&event)
 			if pub != nil {
-				client.Publish(*pub)
+				//client.Publish(*pub)
 				//对列信息进行count和大values查询
-				suspectedHotkeyStore(pub.Fields)
+				suspectedHotkeyStore(m, pub.Fields)
 			}
 		}
 	}
