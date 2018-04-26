@@ -110,7 +110,6 @@ func NewWatcher(host string, tls *TLSConfig, storeShortID bool) (Watcher, error)
 	if err != nil {
 		return nil, err
 	}
-
 	return NewWatcherWithClient(client, 60*time.Second, storeShortID)
 }
 

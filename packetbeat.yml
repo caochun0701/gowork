@@ -1,12 +1,29 @@
+#============================== Network device ================================
+# Select the network interface to sniff the data. On Linux, you can use the
+# "any" keyword to sniff on all connected interfaces.
 packetbeat.interfaces.device: any
 
 packetbeat.protocols:
 
 
 - type: redis
-  ports: [6391]
+  # Configure the ports where to listen for Redis traffic. You can disable
+  # the Redis protocol by commenting out the list of ports.
+  ports: [6379]
 
+#================================ Outputs =====================================
 output:
   file:
-    path: "/export/Logs/monitor/6391"
+    path: "/home/caochun"
     filename: redismonitor.log
+# Configure what output to use when sending the data collected by the beat.
+
+#-------------------------- Elasticsearch output ------------------------------
+#output.elasticsearch:
+  # Array of hosts to connect to.
+  #hosts: ["localhost:9200"]
+
+  # Optional protocol and basic auth credentials.
+  #protocol: "https"
+  #username: "elastic"
+  #password: "changeme"
