@@ -31,7 +31,7 @@ type Decoder struct {
 	//icmp4     layers.ICMPv4
 	//icmp6     layers.ICMPv6
 	tcp       layers.TCP
-	udp       layers.UDP
+	//udp       layers.UDP
 	truncated bool
 
 	stD1Q, stIP4, stIP6 multiLayer
