@@ -1,7 +1,7 @@
 #============================== Network device ================================
 # Select the network interface to sniff the data. On Linux, you can use the
 # "any" keyword to sniff on all connected interfaces.
-packetbeat.interfaces.device: any
+packetbeat.interfaces.device: en0
 
 packetbeat.protocols:
 
@@ -14,7 +14,7 @@ packetbeat.protocols:
 #================================ Outputs =====================================
 output:
   file:
-    path: "/home/caochun"
+    path: "/Users/caochun"
     filename: redismonitor.log
 # Configure what output to use when sending the data collected by the beat.
 
