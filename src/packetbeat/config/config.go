@@ -45,6 +45,10 @@ type ProtocolCommon struct {
 	SendRequest        bool          `config:"send_request"`
 	SendResponse       bool          `config:"send_response"`
 	TransactionTimeout time.Duration `config:"transaction_timeout"`
+	//统计时长 、 默认 10秒
+	HowLong int `config:"how_long"`
+	//执行次数 默认 2次
+	CountTimes int `config:"count_times"`
 }
 
 func (f *Flows) IsEnabled() bool {

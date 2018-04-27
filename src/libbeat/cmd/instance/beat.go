@@ -24,7 +24,6 @@ import (
 	"libbeat/common"
 	"libbeat/common/cfgwarn"
 	"libbeat/common/file"
-	"libbeat/dashboards"
 	"libbeat/keystore"
 	"libbeat/logp"
 	"libbeat/logp/configure"
@@ -573,20 +572,6 @@ func (b *Beat) loadDashboards(force bool) error {
 		if err != nil {
 			return fmt.Errorf("Error setting dashboard.enabled=true: %v", err)
 		}
-	}
-
-	if b.Config.Dashboards.Enabled() {
-		var esConfig *common.Config
-
-		if b.Config.Output.Name() == "elasticsearch" {
-			esConfig = b.Config.Output.Config()
-		}
-		err := dashboards.ImportDashboards(b.Info.Beat, b.Info.Hostname, paths.Resolve(paths.Home, ""),
-			b.Config.Kibana, esConfig, b.Config.Dashboards, nil)
-		if err != nil {
-			return fmt.Errorf("Error importing Kibana dashboards: %v", err)
-		}
-		logp.Info("Kibana dashboards successfully loaded.")
 	}
 
 	return nil

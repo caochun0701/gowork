@@ -71,7 +71,7 @@ func TestDecodePacketData_ipv4Tcp(t *testing.T) {
 	if p.ErrorLayer() != nil {
 		t.Error("Failed to decode packet:", p.ErrorLayer().Error())
 	}
-	d, tcp, _ := newTestDecoder(t)
+	d, tcp := newTestDecoder(t)
 	d.OnPacket(p.Data(), &p.Metadata().CaptureInfo)
 
 	assert.NotNil(t, tcp.pkt, "TCP packet not received")
@@ -89,23 +89,6 @@ var ipv4UdpDNS = []byte{
 	0xaa, 0x14, 0x80, 0x1b, 0x00, 0x35, 0x00, 0x28, 0xaf, 0x61, 0x75, 0xc0, 0x01, 0x00, 0x00, 0x01,
 	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x03, 0x77, 0x77, 0x77, 0x06, 0x6e, 0x65, 0x74, 0x62, 0x73,
 	0x64, 0x03, 0x6f, 0x72, 0x67, 0x00, 0x00, 0x01, 0x00, 0x01,
-}
-
-// Test that DecodePacket decodes and IPv4/UDP packet and invokes the UDP processor.
-func TestDecodePacketData_ipv4Udp(t *testing.T) {
-	p := gopacket.NewPacket(ipv4UdpDNS, layers.LinkTypeEthernet, gopacket.Default)
-	if p.ErrorLayer() != nil {
-		t.Error("Failed to decode packet:", p.ErrorLayer().Error())
-	}
-	d, _, udp := newTestDecoder(t)
-	d.OnPacket(p.Data(), &p.Metadata().CaptureInfo)
-
-	assert.NotNil(t, udp.pkt, "UDP packet not received")
-	assert.Equal(t, "192.168.170.8", udp.pkt.Tuple.SrcIP.String())
-	assert.Equal(t, uint16(32795), udp.pkt.Tuple.SrcPort)
-	assert.Equal(t, "192.168.170.20", udp.pkt.Tuple.DstIP.String())
-	assert.Equal(t, uint16(53), udp.pkt.Tuple.DstPort)
-	assert.NotEqual(t, -1, strings.Index(string(p.Data()), string(udp.pkt.Payload)))
 }
 
 // IP6 2001:6f8:102d::2d0:9ff:fee3:e8de.59201 > 2001:6f8:900:7c0::2.80
@@ -138,7 +121,7 @@ func TestDecodePacketData_ipv6Tcp(t *testing.T) {
 	if p.ErrorLayer() != nil {
 		t.Error("Failed to decode packet: ", p.ErrorLayer().Error())
 	}
-	d, tcp, _ := newTestDecoder(t)
+	d, tcp := newTestDecoder(t)
 	d.OnPacket(p.Data(), &p.Metadata().CaptureInfo)
 
 	assert.NotNil(t, tcp.pkt, "TCP packet not received")
@@ -163,32 +146,16 @@ var ipv6UdpDNS = []byte{
 	0x6e, 0x74, 0x00, 0x00, 0x0c, 0x00, 0x01,
 }
 
-// Test that DecodePacket decodes and IPv6/UDP packet and invokes the UDP processor.
-func TestDecodePacketData_ipv6Udp(t *testing.T) {
-	p := gopacket.NewPacket(ipv6UdpDNS, layers.LinkTypeEthernet, gopacket.Default)
-	if p.ErrorLayer() != nil {
-		t.Error("Failed to decode packet:", p.ErrorLayer().Error())
-	}
-	d, _, udp := newTestDecoder(t)
-	d.OnPacket(p.Data(), &p.Metadata().CaptureInfo)
-
-	assert.NotNil(t, udp.pkt, "UDP packet not received")
-	assert.Equal(t, "3ffe:507:0:1:200:86ff:fe05:80da", udp.pkt.Tuple.SrcIP.String())
-	assert.Equal(t, uint16(2415), udp.pkt.Tuple.SrcPort)
-	assert.Equal(t, "3ffe:501:4819::42", udp.pkt.Tuple.DstIP.String())
-	assert.Equal(t, uint16(53), udp.pkt.Tuple.DstPort)
-	assert.NotEqual(t, -1, strings.Index(string(p.Data()), string(udp.pkt.Payload)))
-}
-
 // Creates a new TestDecoder that handles ethernet packets.
-func newTestDecoder(t *testing.T) (*Decoder, *TestTCPProcessor, *TestUDPProcessor) {
-	icmp4Layer := &TestIcmp4Processor{}
-	icmp6Layer := &TestIcmp6Processor{}
+func newTestDecoder(t *testing.T) (*Decoder, *TestTCPProcessor) {
+	//icmp4Layer := &TestIcmp4Processor{}
+	//icmp6Layer := &TestIcmp6Processor{}
 	tcpLayer := &TestTCPProcessor{}
-	udpLayer := &TestUDPProcessor{}
-	d, err := New(nil, layers.LinkTypeEthernet, icmp4Layer, icmp6Layer, tcpLayer, udpLayer)
+	//udpLayer := &TestUDPProcessor{}
+	//d, err := New(layers.LinkTypeEthernet, icmp4Layer, icmp6Layer, tcpLayer)
+	d, err := New(layers.LinkTypeEthernet, tcpLayer)
 	if err != nil {
 		t.Fatalf("Error creating decoder %v", err)
 	}
-	return d, tcpLayer, udpLayer
+	return d, tcpLayer
 }

@@ -7,7 +7,9 @@ import (
 	"libbeat/common"
 	"libbeat/logp"
 	"libbeat/processors"
-	"packetbeat/protos/redis"
+	"time"
+	"sync"
+	"fmt"
 )
 
 type TransactionPublisher struct {
@@ -98,29 +100,41 @@ func (p *TransactionPublisher) CreateReporter(
 }
 
 func (p *TransactionPublisher) worker(ch chan beat.Event, client beat.Client) {
+	//定时器 5 秒执行一次
+	t := time.NewTimer(5*time.Second)
+	//创建一个map
+	m := new(sync.Map)
 	for {
 		select {
 		case <-p.done:
 			return
+		case <-t.C:
+			// range
+			findHotKeysBigValues(m,client)
+			m = new(sync.Map)
+			//重新设置5秒过期
+			t.Reset(5*time.Second)
 		case event := <-ch:
 			pub, _ := p.processor.Run(&event)
 			if pub != nil {
-				client.Publish(*pub)
+				//client.Publish(*pub)
+				//对列信息进行count和大values查询
+				suspectedHotkeyStore(m, pub.Fields)
 			}
 		}
 	}
 }
 
 func (p *transProcessor) Run(event *beat.Event) (*beat.Event, error) {
+	//filter 验证
 	if err := validateEvent(event); err != nil {
 		logp.Warn("Dropping invalid event: %v", err)
 		return nil, nil
 	}
-
+	//重新设置地址信息
 	if !p.normalizeTransAddr(event.Fields) {
 		return nil, nil
 	}
-
 	return event, nil
 }
 
@@ -172,6 +186,5 @@ func (p *transProcessor) normalizeTransAddr(event common.MapStr) bool {
 		event["port"] = dst.Port
 		delete(event, "dst")
 	}
-	redis.SuspectedHotkeyStore(event)
 	return true
 }

@@ -20,7 +20,7 @@ import (
 	//"packetbeat/flows"
 	"packetbeat/procs"
 	"packetbeat/protos"
-	"packetbeat/protos/icmp"
+	//"packetbeat/protos/icmp"
 	"packetbeat/protos/tcp"
 	//"packetbeat/protos/udp"
 	"packetbeat/publish"
@@ -224,26 +224,26 @@ func (pb *packetbeat) Stop() {
 }
 
 func (pb *packetbeat) createWorker(dl layers.LinkType) (sniffer.Worker, error) {
-	var icmp4 icmp.ICMPv4Processor
-	var icmp6 icmp.ICMPv6Processor
-	cfg, err := pb.icmpConfig()
-	if err != nil {
-		return nil, err
-	}
-	if cfg.Enabled() {
-		reporter, err := pb.transPub.CreateReporter(cfg)
-		if err != nil {
-			return nil, err
-		}
-
-		icmp, err := icmp.New(false, reporter, cfg)
-		if err != nil {
-			return nil, err
-		}
-
-		icmp4 = icmp
-		icmp6 = icmp
-	}
+	//var icmp4 icmp.ICMPv4Processor
+	//var icmp6 icmp.ICMPv6Processor
+	//cfg, err := pb.icmpConfig()
+	//if err != nil {
+	//	return nil, err
+	//}
+	//if cfg.Enabled() {
+	//	reporter, err := pb.transPub.CreateReporter(cfg)
+	//	if err != nil {
+	//		return nil, err
+	//	}
+	//
+	//	icmp, err := icmp.New(false, reporter, cfg)
+	//	if err != nil {
+	//		return nil, err
+	//	}
+	//
+	//	icmp4 = icmp
+	//	icmp6 = icmp
+	//}
 
 	tcp, err := tcp.NewTCP(&protos.Protos)
 	if err != nil {
@@ -256,7 +256,8 @@ func (pb *packetbeat) createWorker(dl layers.LinkType) (sniffer.Worker, error) {
 	//}
 
 	//worker, err := decoder.New(pb.flows, dl, icmp4, icmp6, tcp, udp)
-	worker, err := decoder.New(dl, icmp4, icmp6, tcp)
+	//worker, err := decoder.New(dl, icmp4, icmp6, tcp)
+	worker, err := decoder.New(dl, tcp)
 	if err != nil {
 		return nil, err
 	}
