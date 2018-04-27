@@ -1,15 +1,12 @@
 package publish
 
 import (
-	"errors"
-
 	"libbeat/beat"
 	"libbeat/common"
 	"libbeat/logp"
 	"libbeat/processors"
 	"time"
 	"sync"
-	"fmt"
 )
 
 type TransactionPublisher struct {
@@ -127,10 +124,10 @@ func (p *TransactionPublisher) worker(ch chan beat.Event, client beat.Client) {
 
 func (p *transProcessor) Run(event *beat.Event) (*beat.Event, error) {
 	//filter 验证
-	if err := validateEvent(event); err != nil {
-		logp.Warn("Dropping invalid event: %v", err)
-		return nil, nil
-	}
+	//if err := validateEvent(event); err != nil {
+	//	logp.Warn("Dropping invalid event: %v", err)
+	//	return nil, nil
+	//}
 	//重新设置地址信息
 	if !p.normalizeTransAddr(event.Fields) {
 		return nil, nil
@@ -143,26 +140,26 @@ filter 验证，是否有@timestamp、type
 如果验证不通过则返回 error.
 */
 func validateEvent(event *beat.Event) error {
-	fields := event.Fields
-
-	if event.Timestamp.IsZero() {
-		return errors.New("missing '@timestamp'")
-	}
-
-	_, ok := fields["@timestamp"]
-	if ok {
-		return errors.New("duplicate '@timestamp' field from event")
-	}
-
-	t, ok := fields["type"]
-	if !ok {
-		return errors.New("missing 'type' field from event")
-	}
-
-	_, ok = t.(string)
-	if !ok {
-		return errors.New("invalid 'type' field from event")
-	}
+	//fields := event.Fields
+	//
+	//if event.Timestamp.IsZero() {
+	//	return errors.New("missing '@timestamp'")
+	//}
+	//
+	//_, ok := fields["@timestamp"]
+	//if ok {
+	//	return errors.New("duplicate '@timestamp' field from event")
+	//}
+	//
+	//t, ok := fields["type"]
+	//if !ok {
+	//	return errors.New("missing 'type' field from event")
+	//}
+	//
+	//_, ok = t.(string)
+	//if !ok {
+	//	return errors.New("invalid 'type' field from event")
+	//}
 
 	return nil
 }

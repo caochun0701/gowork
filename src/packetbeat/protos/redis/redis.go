@@ -313,7 +313,7 @@ func (redis *redisPlugin) newTransaction(requ, resp *redisMessage) beat.Event {
 		"responsetime": responseTime,
 		//"redis":        returnValue,
 		"method":       common.NetString(bytes.ToUpper(requ.method)),
-		"resource":     requ.path,
+		"key_name":     requ.path,
 		"query":        requ.message,
 		"bytes_in":     uint64(requ.size),
 		"bytes_out":    uint64(resp.size),
@@ -327,7 +327,7 @@ func (redis *redisPlugin) newTransaction(requ, resp *redisMessage) beat.Event {
 		fields["response"] = resp.message
 	}
 	return beat.Event{
-		Timestamp: requ.ts,
+		//Timestamp: requ.ts,
 		Fields:    fields,
 	}
 }

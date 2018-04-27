@@ -6,7 +6,6 @@ import (
 	"libbeat/common"
 	"fmt"
 	"bytes"
-	"time"
 )
 
 /*
@@ -21,12 +20,12 @@ import (
 func suspectedHotkeyStore(m *sync.Map, event common.MapStr){
 	port := event["port"].(uint16)
 	method := event["method"].(common.NetString)
-	resource := event["resource"].(common.NetString)
+	key_name := event["key_name"].(common.NetString)
 	//进行key拼接
 	var buf bytes.Buffer
-	buf.WriteString(string(port)+ ":")
+	buf.WriteString(fmt.Sprint(port)+ ":")
 	buf.WriteString(string(method) + ":")
-	buf.WriteString(string(resource))
+	buf.WriteString(string(key_name))
 
 	fields, ok := m.Load(buf.String())
 	if ok{
@@ -51,18 +50,22 @@ func suspectedHotkeyStore(m *sync.Map, event common.MapStr){
 }
 
 func findHotKeysBigValues(m *sync.Map,client beat.Client)  {
-	m.Range(func(k, v interface{}) bool {
-		fmt.Println(k, v)
+
+	m.Range(func(key, value interface{}) bool {
+		//fmt.Println(value)
+		fields := value.(common.MapStr)
+		count := fields["count"].(int)
+		bytesOut := fields["bytes_out"].(uint64)
 		//找出热key
-		//if(){
+		if(count > 1000){
 			//返回给event进行输出
-			//client.Publish(*pub)
-		//}
+			client.Publish(beat.Event{Fields:fields})
+		}
 		//大values
-		//if(){
+		if(bytesOut > 1048576){
 			//返回给event进行输出
-			//client.Publish(*pub)
-		//}
+			client.Publish(beat.Event{Fields:fields})
+		}
 
 		return true
 	})
