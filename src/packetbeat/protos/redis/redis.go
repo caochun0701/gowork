@@ -208,7 +208,7 @@ func (redis *redisPlugin) doParse(
 }
 /*
 新stream
- */
+*/
 func newStream(ts time.Time, tcptuple *common.TCPTuple) *stream {
 	s := &stream{
 		tcptuple: tcptuple,
@@ -220,7 +220,7 @@ func newStream(ts time.Time, tcptuple *common.TCPTuple) *stream {
 /*
 新redis消息
 添加时间
- */
+*/
 func newMessage(ts time.Time) *redisMessage {
 	return &redisMessage{ts: ts}
 }

@@ -4,6 +4,7 @@ import (
 	"sync"
 	"libbeat/beat"
 	"libbeat/common"
+	"packetbeat/config"
 	"fmt"
 	"bytes"
 )
@@ -49,20 +50,19 @@ func suspectedHotkeyStore(m *sync.Map, event common.MapStr){
 	debugf("%s , %v", fields, ok)
 }
 
-func findHotKeysBigValues(m *sync.Map,client beat.Client)  {
-
+func findHotKeysBigValues(m *sync.Map,client beat.Client,redisConf config.ProtocolCommon)  {
 	m.Range(func(key, value interface{}) bool {
 		//fmt.Println(value)
 		fields := value.(common.MapStr)
 		count := fields["count"].(int)
 		bytesOut := fields["bytes_out"].(uint64)
 		//找出热key
-		if(count > 1000){
+		if(count > redisConf.HotKeysCount){
 			//返回给event进行输出
 			client.Publish(beat.Event{Fields:fields})
 		}
 		//大values
-		if(bytesOut > 1048576){
+		if(bytesOut > redisConf.BigValueSize){
 			//返回给event进行输出
 			client.Publish(beat.Event{Fields:fields})
 		}

@@ -10,6 +10,14 @@ packetbeat.protocols:
   # Configure the ports where to listen for Redis traffic. You can disable
   # the Redis protocol by commenting out the list of ports.
   ports: [6379]
+  #统计时长 、 默认 10秒
+  how_long: 10
+  #执行次数 默认 2次
+  count_times: 2
+  #热key单位时间内出现的次数
+  hot_keys_count: 1000
+  #大value size大小 bytes
+  big_value_size: 1048576
 
 #================================ Outputs =====================================
 output:
