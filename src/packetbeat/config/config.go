@@ -49,6 +49,10 @@ type ProtocolCommon struct {
 	HowLong int `config:"how_long"`
 	//执行次数 默认 2次
 	CountTimes int `config:"count_times"`
+	//热key单位时间内出现的次数
+	HotKeysCount int `config:"hot_keys_count"`
+	//大value size大小 bytes
+	BigValueSize uint64 `config:"big_value_size"`
 }
 
 func (f *Flows) IsEnabled() bool {

@@ -14,7 +14,6 @@ import (
 
 func testEvent() beat.Event {
 	return beat.Event{
-		Timestamp: time.Now(),
 		Fields: common.MapStr{
 			"type": "test",
 			"src":  &common.Endpoint{},
@@ -87,14 +86,12 @@ func TestDirectionOut(t *testing.T) {
 				Port:    3267,
 				Name:    "server1",
 				Cmdline: "proc1 start",
-				Proc:    "proc1",
 			},
 			"dst": &common.Endpoint{
 				IP:      "192.145.2.5",
 				Port:    32232,
 				Name:    "server2",
 				Cmdline: "proc2 start",
-				Proc:    "proc2",
 			},
 		},
 	}
@@ -122,14 +119,12 @@ func TestDirectionIn(t *testing.T) {
 				Port:    3267,
 				Name:    "server1",
 				Cmdline: "proc1 start",
-				Proc:    "proc1",
 			},
 			"dst": &common.Endpoint{
 				IP:      "192.145.2.5",
 				Port:    32232,
 				Name:    "server2",
 				Cmdline: "proc2 start",
-				Proc:    "proc2",
 			},
 		},
 	}
@@ -157,14 +152,12 @@ func TestNoDirection(t *testing.T) {
 				Port:    3267,
 				Name:    "server1",
 				Cmdline: "proc1 start",
-				Proc:    "proc1",
 			},
 			"dst": &common.Endpoint{
 				IP:      "192.145.2.5",
 				Port:    32232,
 				Name:    "server2",
 				Cmdline: "proc2 start",
-				Proc:    "proc2",
 			},
 		},
 	}

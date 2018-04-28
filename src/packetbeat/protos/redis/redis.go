@@ -208,7 +208,7 @@ func (redis *redisPlugin) doParse(
 }
 /*
 新stream
- */
+*/
 func newStream(ts time.Time, tcptuple *common.TCPTuple) *stream {
 	s := &stream{
 		tcptuple: tcptuple,
@@ -220,7 +220,7 @@ func newStream(ts time.Time, tcptuple *common.TCPTuple) *stream {
 /*
 新redis消息
 添加时间
- */
+*/
 func newMessage(ts time.Time) *redisMessage {
 	return &redisMessage{ts: ts}
 }
@@ -313,7 +313,7 @@ func (redis *redisPlugin) newTransaction(requ, resp *redisMessage) beat.Event {
 		"responsetime": responseTime,
 		//"redis":        returnValue,
 		"method":       common.NetString(bytes.ToUpper(requ.method)),
-		"resource":     requ.path,
+		"key_name":     requ.path,
 		"query":        requ.message,
 		"bytes_in":     uint64(requ.size),
 		"bytes_out":    uint64(resp.size),
@@ -327,7 +327,7 @@ func (redis *redisPlugin) newTransaction(requ, resp *redisMessage) beat.Event {
 		fields["response"] = resp.message
 	}
 	return beat.Event{
-		Timestamp: requ.ts,
+		//Timestamp: requ.ts,
 		Fields:    fields,
 	}
 }

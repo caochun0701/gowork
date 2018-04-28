@@ -1,7 +1,7 @@
 package json
 
 import (
-	"time"
+	//"time"
 
 	"libbeat/beat"
 	"libbeat/common"
@@ -10,13 +10,13 @@ import (
 // Event describes the event structure for events
 // (in-)directly send to logstash
 type event struct {
-	Timestamp time.Time     `struct:"@timestamp"`
+	//Timestamp time.Time     `struct:"@timestamp"`
 	Meta      meta          `struct:"@metadata"`
 	Fields    common.MapStr `struct:",inline"`
 }
 
 type eventfile struct {
-	Timestamp time.Time     `struct:"@timestamp"`
+	//Timestamp time.Time     `struct:"@timestamp"`
 	Fields    common.MapStr `struct:",inline"`
 }
 
@@ -30,7 +30,7 @@ type meta struct {
 
 func makeEvent(index, version string, in *beat.Event) event {
 	return event{
-		Timestamp: in.Timestamp,
+		//Timestamp: in.Timestamp,
 		Meta: meta{
 			Beat:    index,
 			Version: version,
@@ -43,7 +43,7 @@ func makeEvent(index, version string, in *beat.Event) event {
 
 func makeEventFile(in *beat.Event) eventfile {
 	return eventfile{
-		Timestamp: in.Timestamp,
+		//Timestamp: in.Timestamp,
 		Fields: in.Fields,
 	}
 }
