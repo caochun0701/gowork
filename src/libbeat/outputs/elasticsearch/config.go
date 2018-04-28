@@ -3,7 +3,7 @@ package elasticsearch
 import (
 	"time"
 
-	"libbeat/outputs"
+	//"libbeat/outputs"
 )
 
 type elasticsearchConfig struct {
@@ -16,7 +16,7 @@ type elasticsearchConfig struct {
 	ProxyURL         string             `config:"proxy_url"`
 	LoadBalance      bool               `config:"loadbalance"`
 	CompressionLevel int                `config:"compression_level" validate:"min=0, max=9"`
-	TLS              *outputs.TLSConfig `config:"ssl"`
+	//TLS              *outputs.TLSConfig `config:"ssl"`
 	BulkMaxSize      int                `config:"bulk_max_size"`
 	MaxRetries       int                `config:"max_retries"`
 	Timeout          time.Duration      `config:"timeout"`
@@ -43,7 +43,7 @@ var (
 		Timeout:          90 * time.Second,
 		MaxRetries:       3,
 		CompressionLevel: 0,
-		TLS:              nil,
+		//TLS:              nil,
 		LoadBalance:      true,
 		Backoff: Backoff{
 			Init: 1 * time.Second,

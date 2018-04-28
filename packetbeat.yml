@@ -22,7 +22,7 @@ packetbeat.protocols:
 #================================ Outputs =====================================
 output:
   file:
-    path: "/Users/caochun"
+    path: "/export/Logs"
     filename: redismonitor.log
 # Configure what output to use when sending the data collected by the beat.
 

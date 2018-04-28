@@ -8,7 +8,7 @@ import (
 	"libbeat/monitoring/report"
 	esout "libbeat/outputs/elasticsearch"
 	"libbeat/publisher"
-	"libbeat/testing"
+	//"libbeat/testing"
 )
 
 type publishClient struct {
@@ -101,6 +101,6 @@ func (c *publishClient) Publish(batch publisher.Batch) error {
 	return nil
 }
 
-func (c *publishClient) Test(d testing.Driver) {
-	c.es.Test(d)
-}
+//func (c *publishClient) Test(d testing.Driver) {
+//	c.es.Test(d)
+//}

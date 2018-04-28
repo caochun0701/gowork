@@ -80,10 +80,10 @@ func makeES(
 		return outputs.Fail(err)
 	}
 
-	tlsConfig, err := outputs.LoadTLSConfig(config.TLS)
-	if err != nil {
-		return outputs.Fail(err)
-	}
+	//tlsConfig, err := outputs.LoadTLSConfig(config.TLS)
+	//if err != nil {
+	//	return outputs.Fail(err)
+	//}
 
 	pipelineSel, err := outil.BuildSelectorFromConfig(cfg, outil.Settings{
 		Key:              "pipeline",
@@ -127,7 +127,7 @@ func makeES(
 			Index:            index,
 			Pipeline:         pipeline,
 			Proxy:            proxyURL,
-			TLS:              tlsConfig,
+			//TLS:              tlsConfig,
 			Username:         config.Username,
 			Password:         config.Password,
 			Parameters:       params,
@@ -187,10 +187,10 @@ func NewElasticsearchClients(cfg *common.Config) ([]Client, error) {
 		return nil, err
 	}
 
-	tlsConfig, err := outputs.LoadTLSConfig(config.TLS)
-	if err != nil {
-		return nil, err
-	}
+	//tlsConfig, err := outputs.LoadTLSConfig(config.TLS)
+	//if err != nil {
+	//	return nil, err
+	//}
 
 	proxyURL, err := parseProxyURL(config.ProxyURL)
 	if err != nil {
@@ -216,7 +216,7 @@ func NewElasticsearchClients(cfg *common.Config) ([]Client, error) {
 		client, err := NewClient(ClientSettings{
 			URL:              esURL,
 			Proxy:            proxyURL,
-			TLS:              tlsConfig,
+			//TLS:              tlsConfig,
 			Username:         config.Username,
 			Password:         config.Password,
 			Parameters:       params,

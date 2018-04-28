@@ -17,10 +17,8 @@ import (
 	"github.com/satori/go.uuid"
 	"go.uber.org/zap"
 
-	"libbeat/api"
 	"libbeat/beat"
 	"libbeat/cfgfile"
-	"libbeat/cloudid"
 	"libbeat/common"
 	"libbeat/common/cfgwarn"
 	"libbeat/common/file"
@@ -306,9 +304,9 @@ func (b *Beat) launch(bt beat.Creator) error {
 
 	logp.Info("%s start running.", b.Info.Beat)
 
-	if b.Config.HTTP.Enabled() {
-		api.Start(b.Config.HTTP, b.Info)
-	}
+	//if b.Config.HTTP.Enabled() {
+	//	api.Start(b.Config.HTTP, b.Info)
+	//}
 
 	return beater.Run(&b.Beat)
 }
@@ -438,10 +436,10 @@ func (b *Beat) configure() error {
 	// TODO: Allow the options to be more flexible for dynamic changes
 	common.OverwriteConfigOpts(keystore.ConfigOpts(store))
 	b.keystore = store
-	err = cloudid.OverwriteSettings(cfg)
-	if err != nil {
-		return err
-	}
+	//err = cloudid.OverwriteSettings(cfg)
+	//if err != nil {
+	//	return err
+	//}
 
 	b.RawConfig = cfg
 	err = cfg.Unpack(&b.Config)

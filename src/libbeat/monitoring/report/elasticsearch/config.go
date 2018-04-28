@@ -3,7 +3,7 @@ package elasticsearch
 import (
 	"time"
 
-	"libbeat/outputs"
+	//"libbeat/outputs"
 )
 
 // config is subset of libbeat/outputs/elasticsearch config tailored
@@ -17,7 +17,7 @@ type config struct {
 	Password         string             `config:"password"`
 	ProxyURL         string             `config:"proxy_url"`
 	CompressionLevel int                `config:"compression_level" validate:"min=0, max=9"`
-	TLS              *outputs.TLSConfig `config:"ssl"`
+	//TLS              *outputs.TLSConfig `config:"ssl"`
 	MaxRetries       int                `config:"max_retries"`
 	Timeout          time.Duration      `config:"timeout"`
 	Period           time.Duration      `config:"period"`
@@ -35,7 +35,7 @@ var defaultConfig = config{
 	Password:         "",
 	ProxyURL:         "",
 	CompressionLevel: 0,
-	TLS:              nil,
+	//TLS:              nil,
 	MaxRetries:       3,
 	Timeout:          60 * time.Second,
 	Period:           10 * time.Second,

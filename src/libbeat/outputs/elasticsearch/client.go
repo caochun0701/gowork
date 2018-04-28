@@ -15,15 +15,15 @@ import (
 	"libbeat/logp"
 	"libbeat/outputs"
 	"libbeat/outputs/outil"
-	"libbeat/outputs/transport"
+	//"libbeat/outputs/transport"
 	"libbeat/publisher"
-	"libbeat/testing"
+	//"libbeat/testing"
 )
 
 // Client is an elasticsearch client.
 type Client struct {
 	Connection
-	tlsConfig *transport.TLSConfig
+	//tlsConfig *transport.TLSConfig
 
 	index    outil.Selector
 	pipeline *outil.Selector
@@ -47,7 +47,7 @@ type Client struct {
 type ClientSettings struct {
 	URL                string
 	Proxy              *url.URL
-	TLS                *transport.TLSConfig
+	//TLS                *transport.TLSConfig
 	Username, Password string
 	Parameters         map[string]string
 	Headers            map[string]string
@@ -145,18 +145,18 @@ func NewClient(
 	logp.Info("Elasticsearch url: %s", s.URL)
 
 	// TODO: add socks5 proxy support
-	var dialer, tlsDialer transport.Dialer
-
-	dialer = transport.NetDialer(s.Timeout)
-	tlsDialer, err = transport.TLSDialer(dialer, s.TLS, s.Timeout)
-	if err != nil {
-		return nil, err
-	}
-
-	if st := s.Observer; st != nil {
-		dialer = transport.StatsDialer(dialer, st)
-		tlsDialer = transport.StatsDialer(tlsDialer, st)
-	}
+	//var dialer, tlsDialer transport.Dialer
+	//
+	//dialer = transport.NetDialer(s.Timeout)
+	//tlsDialer, err = transport.TLSDialer(dialer, s.TLS, s.Timeout)
+	//if err != nil {
+	//	return nil, err
+	//}
+	//
+	//if st := s.Observer; st != nil {
+	//	dialer = transport.StatsDialer(dialer, st)
+	//	tlsDialer = transport.StatsDialer(tlsDialer, st)
+	//}
 
 	params := s.Parameters
 	bulkRequ, err := newBulkRequest(s.URL, "", "", params, nil)
@@ -183,15 +183,15 @@ func NewClient(
 			Headers:  s.Headers,
 			http: &http.Client{
 				Transport: &http.Transport{
-					Dial:    dialer.Dial,
-					DialTLS: tlsDialer.Dial,
+					//Dial:    dialer.Dial,
+					//DialTLS: tlsDialer.Dial,
 					Proxy:   proxy,
 				},
 				Timeout: s.Timeout,
 			},
 			encoder: encoder,
 		},
-		tlsConfig: s.TLS,
+		//tlsConfig: s.TLS,
 		index:     s.Index,
 		pipeline:  pipeline,
 		params:    params,
@@ -235,7 +235,7 @@ func (client *Client) Clone() *Client {
 			Index:            client.index,
 			Pipeline:         client.pipeline,
 			Proxy:            client.proxyURL,
-			TLS:              client.tlsConfig,
+			//TLS:              client.tlsConfig,
 			Username:         client.Username,
 			Password:         client.Password,
 			Parameters:       nil, // XXX: do not pass params?
@@ -614,37 +614,37 @@ func (client *Client) GetVersion() string {
 	return client.Connection.version
 }
 
-func (client *Client) Test(d testing.Driver) {
-	d.Run("elasticsearch: "+client.URL, func(d testing.Driver) {
-		u, err := url.Parse(client.URL)
-		d.Fatal("parse url", err)
-
-		address := u.Hostname()
-		if u.Port() != "" {
-			address += ":" + u.Port()
-		}
-		d.Run("connection", func(d testing.Driver) {
-			netDialer := transport.TestNetDialer(d, client.timeout)
-			_, err = netDialer.Dial("tcp", address)
-			d.Fatal("dial up", err)
-		})
-
-		if u.Scheme != "https" {
-			d.Warn("TLS", "secure connection disabled")
-		} else {
-			d.Run("TLS", func(d testing.Driver) {
-				netDialer := transport.NetDialer(client.timeout)
-				tlsDialer, err := transport.TestTLSDialer(d, netDialer, client.tlsConfig, client.timeout)
-				_, err = tlsDialer.Dial("tcp", address)
-				d.Fatal("dial up", err)
-			})
-		}
-
-		err = client.Connect()
-		d.Fatal("talk to server", err)
-		d.Info("version", client.version)
-	})
-}
+//func (client *Client) Test(d testing.Driver) {
+//	d.Run("elasticsearch: "+client.URL, func(d testing.Driver) {
+//		u, err := url.Parse(client.URL)
+//		d.Fatal("parse url", err)
+//
+//		address := u.Hostname()
+//		if u.Port() != "" {
+//			address += ":" + u.Port()
+//		}
+//		d.Run("connection", func(d testing.Driver) {
+//			netDialer := transport.TestNetDialer(d, client.timeout)
+//			_, err = netDialer.Dial("tcp", address)
+//			d.Fatal("dial up", err)
+//		})
+//
+//		if u.Scheme != "https" {
+//			d.Warn("TLS", "secure connection disabled")
+//		} else {
+//			d.Run("TLS", func(d testing.Driver) {
+//				netDialer := transport.NetDialer(client.timeout)
+//				tlsDialer, err := transport.TestTLSDialer(d, netDialer, client.tlsConfig, client.timeout)
+//				_, err = tlsDialer.Dial("tcp", address)
+//				d.Fatal("dial up", err)
+//			})
+//		}
+//
+//		err = client.Connect()
+//		d.Fatal("talk to server", err)
+//		d.Info("version", client.version)
+//	})
+//}
 
 // Connect connects the client.
 func (conn *Connection) Connect() error {

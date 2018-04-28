@@ -16,7 +16,7 @@ import (
 	"libbeat/outputs"
 	esout "libbeat/outputs/elasticsearch"
 	"libbeat/outputs/outil"
-	"libbeat/outputs/transport"
+	//"libbeat/outputs/transport"
 	"libbeat/publisher/pipeline"
 	"libbeat/publisher/queue"
 	"libbeat/publisher/queue/memqueue"
@@ -72,10 +72,10 @@ func makeReporter(beat beat.Info, cfg *common.Config) (report.Reporter, error) {
 	if proxyURL != nil {
 		logp.Info("Using proxy URL: %s", proxyURL)
 	}
-	tlsConfig, err := outputs.LoadTLSConfig(config.TLS)
-	if err != nil {
-		return nil, err
-	}
+	//tlsConfig, err := outputs.LoadTLSConfig(config.TLS)
+	//if err != nil {
+	//	return nil, err
+	//}
 
 	params := map[string]string{}
 	for k, v := range defaultParams {
@@ -97,7 +97,7 @@ func makeReporter(beat beat.Info, cfg *common.Config) (report.Reporter, error) {
 		return nil, err
 	}
 	for _, host := range hosts {
-		client, err := makeClient(host, params, proxyURL, tlsConfig, &config)
+		client, err := makeClient(host, params, proxyURL, &config)
 		if err != nil {
 			return nil, err
 		}
@@ -217,7 +217,7 @@ func makeClient(
 	host string,
 	params map[string]string,
 	proxyURL *url.URL,
-	tlsConfig *transport.TLSConfig,
+	//tlsConfig *transport.TLSConfig,
 	config *config,
 ) (outputs.NetworkClient, error) {
 	url, err := common.MakeURL(config.Protocol, "", host, 9200)
@@ -228,7 +228,7 @@ func makeClient(
 	esClient, err := esout.NewClient(esout.ClientSettings{
 		URL:              url,
 		Proxy:            proxyURL,
-		TLS:              tlsConfig,
+		//TLS:              tlsConfig,
 		Username:         config.Username,
 		Password:         config.Password,
 		Parameters:       params,
